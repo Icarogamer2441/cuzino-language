@@ -1,4 +1,5 @@
 import time
+import subprocess
 
 def talk(*message):
   print(*message)
@@ -86,6 +87,9 @@ def helps():
     print("execlines<code1, code2>: executes two codes in one line. can be used on the whiles and ifs function")
     print("cip(type)<varname, value>:creates a variable with the tyoe you write. types: str, boo, int, flo")
 
+def terminal(command):
+  subprocess.run(command, shell=True)
+
 def execute_cuzino(code):
   lines = code.split('\n')
   
@@ -148,6 +152,9 @@ def execute_cuzino(code):
       code2 = line.split(',')[1].split('>')[0].strip('\"\'')
       execute_cuzino(code1)
       execute_cuzino(code2)
+    elif line.startswith('terminal'):
+      command = line.split('{')[1].split('}').strip('\"\'')
+      terminal(command)
 
 file_name = input('.cuz file name (use only the name not the name.cuz) > ')
 execfilee(file_name)
