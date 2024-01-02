@@ -57,6 +57,18 @@ def append(filename, code):
   with open(filename, 'a') as f:
     f.write(code)
 
+def cip(typename, varname, value):
+  if typename == 'str':
+    variaveis[varname] = str(value)
+  elif typename == 'boo':
+    variaveis[varname] = bool(value)
+  elif typename == 'int':
+    variaveis[varname] = int(value)
+  elif typename == 'flo':
+    variaveis[varname] = float(value)
+  else:
+    print('uknown var type')
+
 def helps():
     print("Functions available in the language:")
     print("talk(message): Displays a message on the screen.")
@@ -87,9 +99,11 @@ def execute_cuzino(code):
       coding = line.split('{')[1].split('}')[0].strip()
       ifs(condition1, condition2, coding)
     elif line.startswith("cip"):
-      name = line.split()[1].split('=')[0].strip('\"\'')
-      value = line.split('=')[1].strip()
-      variaveis[name] = value
+      typename = line.split('(')[1].split(')')[0].strip('\"\'')
+      name = line.split('<')[1].split(',')[0].strip('\"\'')
+      value = line.split(',')[1].split('>')[0].strip('\"\'')
+      
+      cip(typename, name, value)
     elif line.startswith("vs"):
       varname = line.split()[1].strip('\"\'')
       vs(varname)
