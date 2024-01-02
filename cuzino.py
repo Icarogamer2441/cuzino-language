@@ -59,18 +59,19 @@ def append(filename, code):
 
 def helps():
     print("Functions available in the language:")
-    print("talk(*message): Displays a message on the screen.")
-    print("ifs(condition1, condition2, *code): Executes a code block if two conditions are equal.")
-    print("vs(varname): Displays the value associated with a variable.")
-    print("whiles(condition, *code): Executes a code block while the condition is true.")
+    print("talk(message): Displays a message on the screen.")
+    print("ifs(condition1, condition2){cods}: Executes a code block if two conditions are equal.")
+    print("vs varname: Displays the value associated with a variable.")
+    print("whiles(condition){code}: Executes a code block while the condition is true.")
     print("addtext(varname, text): Adds text to the value of a variable.")
-    print("execfilee(filename): Executes the code from a .cuz file.")
-    print("talkfile(filename): Displays the content of a file.")
-    print("cop(question, varname): Asks the user a question and saves the response in a variable.")
-    print("read(filename, varname): Reads the content of a file and stores it in a variable.")
-    print("cup(seconds): Pauses the program execution for a specified number of seconds.")
-    print("write(filename, code): Writes code content to a file.")
-    print("append(filename, code): Appends code content to the end of a file.")
+    print("importfile filename: Executes the code from a .cuz file.")
+    print("talkfile filename: Displays the content of a file.")
+    print("cop question (varname): Asks the user a question and saves the response in a variable.")
+    print("read(filename)>varnams<: Reads the content of a file and stores it in a variable.")
+    print("cup<([seconds])>: Pauses the program execution for a specified number of seconds.")
+    print("write(filename)>code<: Writes code content to a file.")
+    print("append(filename,code): Appends code content to the end of a file.")
+    print("execlines<code1, code2>: executes two codes in one line. can be used on the whiles and ifs function")
 
 def execute_cuzino(code):
   lines = code.split('\n')
@@ -122,11 +123,16 @@ def execute_cuzino(code):
       code = line.split('>')[1].split('<')[0].strip('\"\'')
       write(filename, code)
     elif line.startswith('append'):
-      filename = line.split('@')[1].strip('\"\'')
-      code = line.split('(')[1].split(')')[0].strip('\"\'')
+      filename = line.split('(')[1].split(',')[0].strip('\"\'')
+      code = line.split(',')[1].split(')')[0].strip('\"\'')
       append(filename, code)
     elif line.startswith('help'):
       helps()
+    elif line.startswith('execlines'):
+      code1 = line.split('<')[1].split(',')[0].strip('\"\'')
+      code2 = line.split(',')[1].split('>')[0].strip('\"\'')
+      execute_cuzino(code1)
+      execute_cuzino(code2)
 
 file_name = input('.cuz file name (use only the name not the name.cuz) > ')
 execfilee(file_name)
