@@ -58,6 +58,10 @@ def append(filename, code):
   with open(filename, 'a') as f:
     f.write(code)
 
+def fors(times, code):
+  for i in range(int(times)):
+    execute_cuzino(code)
+
 def cip(typename, varname, value):
   if typename == 'str':
     variaveis[varname] = str(value)
@@ -86,6 +90,9 @@ def helps():
     print("append(filename,code): Appends code content to the end of a file.")
     print("execlines<code1, code2>: executes two codes in one line. can be used on the whiles and ifs function")
     print("cip(type)<varname, value>:creates a variable with the tyoe you write. types: str, boo, int, flo")
+    print("terminal{terminal comand}: executes a terminal command")
+    print("clear: clear the terminal")
+    print("fors<times_to_repeat>[cuzino_code]: repeats the code for some time")
 
 def terminal(command):
   subprocess.run(command, shell=True)
@@ -167,6 +174,12 @@ def execute_cuzino(code):
         terminal(command)
       else:
         print("Comando 'terminal' não está formatado corretamente")
+    elif line.startswith('clear'):
+      terminal('clear')
+    elif line.startswith('fors'):
+      times = line.startswith('<')[1].split('>')[0].strip('\"\'')
+      code = line.startswith('[')[1].split(']')[0].strip('\"\'')
+      fors(times, code)
 
 
 def execfileex(filename):
@@ -194,4 +207,4 @@ elif file_name.lower() == 'helpx':
   print('tag(html_code): writes html code into index.html file')
   
 else:
-  execute_cuzino(file_name)
+  execfilee(file_nams)
