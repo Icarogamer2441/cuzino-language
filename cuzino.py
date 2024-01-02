@@ -177,7 +177,7 @@ def execute_cuzino(code):
     elif line.startswith('clear'):
       terminal('clear')
     elif line.startswith('fors'):
-      times = line.startswith('<')[1].split('>')[0].strip('\"\'')
+      times = line.split('<')[1].split('>')[0].strip('\"\'')
       code = line.startswith('[')[1].split(']')[0].strip('\"\'')
       fors(times, code)
 
