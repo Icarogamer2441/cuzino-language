@@ -66,6 +66,75 @@ def fors(times, code):
 def cip(typename, varname, value):
   if typename == 'str':
     variaveis[varname] = str(value)
+import time
+import subprocess
+import requests
+
+def talk(*message):
+  print(*message)
+
+def ifs(condition1, condition2, *code):
+  if variaveis[condition1] == variaveis[condition2]:
+    execute_cuzino(*code)
+
+def vs(varname):
+  if varname in variaveis:
+    valor = variaveis.get(varname)
+    print(valor)
+  else:
+    print('unknown varname')
+
+def whiles(condition, *code):
+  while condition:
+    execute_cuzino(*code)
+
+variaveis = {}
+functions = {}
+
+def addtext(varname, text):
+  variaveis[varname] = variaveis[varname] + text
+
+def execfilee(filename):
+  with open(filename + '.cuz', 'r') as file:
+    code = file.read()
+  execute_cuzino(code)
+
+def talkfile(filename):
+  with open(filename, 'r') as file:
+    content = file.read()
+  print(content)
+
+def cop(question, varname):
+  if varname in variaveis:
+    variaveis[varname] = input(question)
+  else:
+    print('uknown var')
+
+def read(filename, varname):
+  if varname in variaveis:
+    with open(filename, 'r') as file:
+      variaveis[varname] = file.read()
+  else:
+    print('unknown file or variable')
+
+def cup(seconds):
+  time.sleep(float(seconds))
+
+def write(filename, code):
+  with open(filename, 'w') as f:
+    f.write(code)
+
+def append(filename, code):
+  with open(filename, 'a') as f:
+    f.write(code)
+
+def fors(times, code):
+  for i in range(int(times)):
+    execute_cuzino(code)
+
+def cip(typename, varname, value):
+  if typename == 'str':
+    variaveis[varname] = str(value)
   elif typename == 'boo':
     variaveis[varname] = bool(value)
   elif typename == 'int':
@@ -84,9 +153,20 @@ def fun(funcname,code):
 def cfun(funcname):
   if funcname in functions:
     value = functions.get(funcname)
-    execute_cuzino(funcname)
+    execute_cuzino(value)
   else:
     assert False, f"no function named {funcname}"
+
+def importlib(url):
+  try:
+    response = requests.get(url)
+    if response.status_code == 200:
+      cuzino_code = response.text
+      execute_cuzino(cuzino_code)
+    else:
+      assert False, 'error on installing the cuzino library'
+  except requests.RequestsException as e:
+    print(f'requisition error: {e}')
 
 def helps():
     print("Functions available in the language:")
@@ -109,6 +189,7 @@ def helps():
     print("fors<times_to_repeat>[cuzino_code]: repeats the code for some time")
     print("fun(funcname){code}: defines a function with the cuzino code")
     print('cfun(funcname): call a function')
+    print('importlib(url): imports .cuz file from the web (basically a lib)')
 
 def terminal(command):
   subprocess.run(command, shell=True)
@@ -147,6 +228,93 @@ def execute_cuzino(code):
       condition = line.split('(')[1].split(')')[0].strip()
       coding = line.split('{')[1].split('}')[0].strip()
       whiles(condition, coding)
+    elif line.startswith('addtext'):
+      varname = line.split('(')[1].split(',')[0].strip()
+      text = line.split(',')[1].split(')')[0].strip()
+      addtext(varname, text)
+    elif line.startswith('importfile'):
+      filename = line.split(' ')[1].strip()
+      execfilee(filename)
+    elif line.startswith('talkfile'):
+      filename = line.split()[1].strip('\"\'')
+      talkfile(filename)
+    elif line.startswith('cop'):
+      question = line.split()[1].strip('\"\'')
+      varname = line.split('(')[1].split(')')[0].strip()
+      cop(question, varname)
+    elif line.startswith('read'):
+      filename = line.split('(')[1].split(')')[0].strip('\"\'')
+      varname = line.split('>')[1].split('<')[0].strip('\"\'')
+      read(filename, varname)
+    elif line.startswith('cup'):
+      seconds = line.split('<([')[1].split('])>')[0].strip('\"\'')
+      cup(seconds)
+    elif line.startswith('write'):
+      filename = line.split('(')[1].split(')')[0].strip('\"\'')
+      code = line.split('>')[1].split('<')[0].strip('\"\'')
+      write(filename, code)
+    elif line.startswith('append'):
+      filename = line.split('(')[1].split(',')[0].strip('\"\'')
+      code = line.split(',')[1].split(')')[0].strip('\"\'')
+      append(filename, code)
+    elif line.startswith('help'):
+      helps()
+    elif line.startswith('execlines'):
+      code1 = line.split('<')[1].split(',')[0].strip('\"\'')
+      code2 = line.split(',')[1].split('>')[0].strip('\"\'')
+      execute_cuzino(code1)
+      execute_cuzino(code2)
+    elif line.startswith('terminal'):
+      split_line = line.split('{')
+      if len(split_line) > 1:
+        command = split_line[1].split('}')[0].strip('\"\'')
+        terminal(command)
+      else:
+        print("Comando 'terminal' não está formatado corretamente")
+    elif line.startswith('clear'):
+      terminal('clear')
+    elif line.startswith('fors'):
+      times = line.split('<')[1].split('>')[0].strip('\"\'')
+      code = line.split('[')[1].split(']')[0].strip('\"\'')
+      fors(times, code)
+    elif line.startswith('fun'):
+      funcname = line.split('(')[1].split(')')[0].strip('\"\'')
+      code = line.split('{')[1].split('}')[0].strip('\"\'')
+      fun(funcname, code)
+    elif line.startswith('cfun'):
+      funcname = line.split('(')[1].split(')')[0].strip('\"\'')
+      cfun(funcname)
+    elif line.startswith('importlib'):
+      url = line.split('(')[1].split(')')[0].strip('\"\'')
+      importlib(url)
+
+
+def execfileex(filename):
+  with open(filename + '.cuzx', 'r') as file:
+    code = file.read()
+  execute_cuzinox(code)
+
+def execute_cuzinox(code):
+  lines = code.split('\n')
+  
+  for index, line in enumerate(lines):
+    if line.startswith('<doc>'):
+      writehtml('<!DOCTYPE html>')
+    elif line.startswith('tag'):
+      htmlcode = line.split('(')[1].split(')')[0].strip('\"\'')
+      appendhtml(htmlcode + '\n')
+
+file_name = input('.cuz file name (use only the name not the name.cuz) > ')
+if file_name.lower() == 'x':
+  file_name = input('type your file .cuzx name but without the .cuzx > ')
+  execfileex(file_name)
+elif file_name.lower() == 'helpx':
+  print('you need to have a html file named index.html to work and have a .cuzx file and write x in the name of the .cuz file to open the .cuzx file executor')
+  print('<doc>: writes the <!DOCTYPE html> into the index.html file')
+  print('tag(html_code): writes html code into the index.html file')
+  
+else:
+  execfilee(file_name)
     elif line.startswith('addtext'):
       varname = line.split('(')[1].split(',')[0].strip()
       text = line.split(',')[1].split(')')[0].strip()
