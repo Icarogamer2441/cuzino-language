@@ -1,0 +1,9 @@
+<doc>
+tag(<html>)
+tag(  <head>)
+tag(    <title>test</title>)
+tag(  </head>)
+tag(  <body>)
+tag(    <h1>hello world!</h1>)
+tag(  </body>)
+tag(</html>)
