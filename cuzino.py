@@ -90,6 +90,14 @@ def helps():
 def terminal(command):
   subprocess.run(command, shell=True)
 
+def writehtml(code):
+  with open('index.html', 'w') as f:
+    f.write(code)
+
+def appendhtml(code):
+  with open('index.html', 'a') as f:
+    f.write(code)
+
 def execute_cuzino(code):
   lines = code.split('\n')
   
@@ -153,8 +161,37 @@ def execute_cuzino(code):
       execute_cuzino(code1)
       execute_cuzino(code2)
     elif line.startswith('terminal'):
-      command = line.split('{')[1].split('}').strip('\"\'')
-      terminal(command)
+      split_line = line.split('{')
+      if len(split_line) > 1:
+        command = split_line[1].split('}')[0].strip('\"\'')
+        terminal(command)
+      else:
+        print("Comando 'terminal' não está formatado corretamente")
+
+
+def execfileex(filename):
+  with open(filename + '.cuzx', 'r') as file:
+    code = file.read()
+  execute_cuzinox(code)
+
+def execute_cuzinox(code):
+  lines = code.split('\n')
+  
+  for index, line in enumerate(lines):
+    if line.startswith('<doc>'):
+      writehtml('<!DOCTYPE html>')
+    elif line.startswith('tag'):
+      htmlcode = line.split('(')[1].split(')')[0].strip('\"\'')
+      appendhtml(htmlcode + '\n')
 
 file_name = input('.cuz file name (use only the name not the name.cuz) > ')
-execfilee(file_name)
+if file_name.lower() == 'x':
+  file_name = input('type your file .cuzx name but without the .cuzx > ')
+  execfileex(file_name)
+elif file_name.lower() == 'helpx':
+  print('you need to have a html file named index.html to work and have a .cuzx file and write x in the name of the .cuz file to open the .cuzx file executor')
+  print('<doc>: writes the <!DOCTYPE html>')
+  print('tag(html_code): writes html code into index.html file')
+  
+else:
+  execute_cuzino(file_name)
