@@ -20,6 +20,7 @@ def whiles(condition, *code):
     execute_cuzino(*code)
 
 variaveis = {}
+functions = {}
 
 def addtext(varname, text):
   variaveis[varname] = variaveis[varname] + text
@@ -72,7 +73,19 @@ def cip(typename, varname, value):
   elif typename == 'flo':
     variaveis[varname] = float(value)
   else:
-    print('uknown var type')
+    assert False, 'uknown var type'
+
+def fun(funcname,code):
+  if len(funcname) >= 2:
+    functions[funcname] = code
+  else:
+    assert False, "use more than 1 character to write a function name"
+
+def cfun(funcname):
+  if funcname in functions:
+    execute_cuzino(functions[funcname])
+  else:
+    assert False, f"no function named {funcname}"
 
 def helps():
     print("Functions available in the language:")
@@ -93,6 +106,8 @@ def helps():
     print("terminal{terminal comand}: executes a terminal command")
     print("clear: clear the terminal")
     print("fors<times_to_repeat>[cuzino_code]: repeats the code for some time")
+    print("fun funcname {code}: defines a function with the cuzino code")
+    print('cfun(funcname): call a function')
 
 def terminal(command):
   subprocess.run(command, shell=True)
@@ -180,6 +195,12 @@ def execute_cuzino(code):
       times = line.split('<')[1].split('>')[0].strip('\"\'')
       code = line.split('[')[1].split(']')[0].strip('\"\'')
       fors(times, code)
+    elif line.startswith('fun'):
+      funcname = line.split()[1].strip('\"\'')
+      code = line.split('{')[1].split('}')[0].strip('\"\'')
+      fun(funcname, code)
+    elif line.startswith('cfun'):
+      funcname = line.split('(')[1].split(')')[0].strip('\"\'')
 
 
 def execfileex(filename):
@@ -203,8 +224,8 @@ if file_name.lower() == 'x':
   execfileex(file_name)
 elif file_name.lower() == 'helpx':
   print('you need to have a html file named index.html to work and have a .cuzx file and write x in the name of the .cuz file to open the .cuzx file executor')
-  print('<doc>: writes the <!DOCTYPE html>')
-  print('tag(html_code): writes html code into index.html file')
+  print('<doc>: writes the <!DOCTYPE html> into the index.html file')
+  print('tag(html_code): writes html code into the index.html file')
   
 else:
-  execfilee(file_nams)
+  execfilee(file_name)
