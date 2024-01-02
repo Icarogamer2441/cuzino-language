@@ -83,7 +83,8 @@ def fun(funcname,code):
 
 def cfun(funcname):
   if funcname in functions:
-    execute_cuzino(functions[funcname])
+    value = functions.get(funcname)
+    execute_cuzino(funcname)
   else:
     assert False, f"no function named {funcname}"
 
@@ -201,6 +202,7 @@ def execute_cuzino(code):
       fun(funcname, code)
     elif line.startswith('cfun'):
       funcname = line.split('(')[1].split(')')[0].strip('\"\'')
+      cfun(funcname)
 
 
 def execfileex(filename):
