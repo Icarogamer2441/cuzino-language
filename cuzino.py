@@ -106,7 +106,7 @@ def helps():
     print("terminal{terminal comand}: executes a terminal command")
     print("clear: clear the terminal")
     print("fors<times_to_repeat>[cuzino_code]: repeats the code for some time")
-    print("fun funcname {code}: defines a function with the cuzino code")
+    print("fun(funcname){code}: defines a function with the cuzino code")
     print('cfun(funcname): call a function')
 
 def terminal(command):
@@ -196,7 +196,7 @@ def execute_cuzino(code):
       code = line.split('[')[1].split(']')[0].strip('\"\'')
       fors(times, code)
     elif line.startswith('fun'):
-      funcname = line.split()[1].strip('\"\'')
+      funcname = line.split('(')[1].split(')')[0].strip('\"\'')
       code = line.split('{')[1].split('}')[0].strip('\"\'')
       fun(funcname, code)
     elif line.startswith('cfun'):
