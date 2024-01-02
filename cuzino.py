@@ -72,7 +72,7 @@ def cip(typename, varname, value):
 def helps():
     print("Functions available in the language:")
     print("talk(message): Displays a message on the screen.")
-    print("ifs(condition1, condition2){cods}: Executes a code block if two conditions are equal.")
+    print("ifs(condition1, condition2){code}: Executes a code block if two conditions are equal.")
     print("vs varname: Displays the value associated with a variable.")
     print("whiles(condition){code}: Executes a code block while the condition is true.")
     print("addtext(varname, text): Adds text to the value of a variable.")
@@ -84,6 +84,7 @@ def helps():
     print("write(filename)>code<: Writes code content to a file.")
     print("append(filename,code): Appends code content to the end of a file.")
     print("execlines<code1, code2>: executes two codes in one line. can be used on the whiles and ifs function")
+    print("cip(type)<varname, value>:creates a variable with the tyoe you write. types: str, boo, int, flo")
 
 def execute_cuzino(code):
   lines = code.split('\n')
