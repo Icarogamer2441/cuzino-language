@@ -122,6 +122,9 @@ def helps():
     print("fun(funcname){code}: defines a function with the cuzino code")
     print('cfun(funcname): call a function')
     print('importlib(url): imports .cuz file from the web (basically a lib)')
+    print('execl[code1, code2]: the same logic of the execlines but you can use in the execlines to do more than 2 lines')
+    print('math{mathcode}: prints math results')
+    print('importfilex filename: executes a .cuzx file')
 
 def terminal(command):
   subprocess.run(command, shell=True)
@@ -133,6 +136,10 @@ def writehtml(code):
 def appendhtml(code):
   with open('index.html', 'a') as f:
     f.write(code)
+
+def math(mathcode):
+  mathcode = float(mathcode)
+  print(mathcode)
 
 def execute_cuzino(code):
   lines = code.split('\n')
@@ -219,6 +226,16 @@ def execute_cuzino(code):
     elif line.startswith('importlib'):
       url = line.split('(')[1].split(')')[0].strip('\"\'')
       importlib(url)
+    elif line.startswith('execl'):
+      code1 = line.split('[')[1].split(',')[0].strip('\"\'')
+      code2 = line.split(',')[1].split(']')[0].strip('\"\'')
+      execute_cuzino(code1)
+      execute_cuzino(code2)
+    elif line.startswith('math'):
+      mathcode = line.split('{')[1].split('}')[0].strip('\"\'')
+    elif line.startswith('importfilex'):
+      cuznioxfile = line.split()[1].strip('\"\'')
+      execute_cuzinox(cuznioxfile)
 
 
 def execfileex(filename):
@@ -244,6 +261,7 @@ elif file_name.lower() == 'helpx':
   print('you need to have a html file named index.html to work and have a .cuzx file and write x in the name of the .cuz file to open the .cuzx file executor')
   print('<doc>: writes the <!DOCTYPE html> into the index.html file')
   print('tag(html_code): writes html code into the index.html file')
-  
+elif file_name.lower() == 'version':
+  print('the oficial version! welcome to the v1.0 versiob of cuzino language')
 else:
   execfilee(file_name)
