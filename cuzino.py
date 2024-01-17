@@ -1,6 +1,5 @@
 import time
 import subprocess
-import requests
 
 def talk(*message):
   print(*message)
@@ -89,17 +88,6 @@ def cfun(funcname):
   else:
     assert False, f"no function named {funcname}"
 
-def importlib(url):
-  try:
-    response = requests.get(url)
-    if response.status_code == 200:
-      cuzino_code = response.text
-      execute_cuzino(cuzino_code)
-    else:
-      assert False, 'error on installing the cuzino library'
-  except requests.RequestException as e:
-    print(f'requisition error: {e}')
-
 def helps():
     print("Functions available in the language:")
     print("talk(message): Displays a message on the screen.")
@@ -121,10 +109,11 @@ def helps():
     print("fors<times_to_repeat>[cuzino_code]: repeats the code for some time")
     print("fun(funcname){code}: defines a function with the cuzino code")
     print('cfun(funcname): call a function')
-    print('importlib(url): imports .cuz file from the web (basically a lib)')
     print('execl[code1, code2]: the same logic of the execlines but you can use in the execlines to do more than 2 lines')
     print('math{mathcode}: prints math results')
     print('importfilex filename: executes a .cuzx file')
+    print("banksim.create(filename,bankname): creates a .txt file with the name you give to him, and simulates a data bank file")
+    print("banksim.appendata(filename,content): append a content that is simulating a data-content in your sim bank. write only the file name, because its search for .txt files")
 
 def terminal(command):
   subprocess.run(command, shell=True)
@@ -223,9 +212,6 @@ def execute_cuzino(code):
     elif line.startswith('cfun'):
       funcname = line.split('(')[1].split(')')[0].strip('\"\'')
       cfun(funcname)
-    elif line.startswith('importlib'):
-      url = line.split('(')[1].split(')')[0].strip('\"\'')
-      importlib(url)
     elif line.startswith('execl'):
       code1 = line.split('[')[1].split(',')[0].strip('\"\'')
       code2 = line.split(',')[1].split(']')[0].strip('\"\'')
@@ -236,7 +222,18 @@ def execute_cuzino(code):
     elif line.startswith('importfilex'):
       cuznioxfile = line.split()[1].strip('\"\'')
       execute_cuzinox(cuznioxfile)
-
+    elif line.startswith("banksim"):
+        simtype = line.split(".")[1].strip("\"\'")
+        if simtype.startswith("create"):
+            filename = simtype.split("(")[1].split(",")[0].strip("\"\'")
+            banksimname = simtype.split(",")[1].split(")")[0].strip("\"\'")
+            with open(filename + ".txt", "w") as bank:
+                bank.write(f"####---- {banksimname} ----####\n\n")
+        elif simtype.startswith("appendata"):
+            filename = simtype.split("(")[1].split(",")[0].strip("\"\'")
+            content = simtype.split(",")[1].split(")")[0].strip("\"\'")
+            with open(filename + ".txt", "a") as file:
+                file.write("data: " + content + "\n")
 
 def execfileex(filename):
   with open(filename + '.cuzx', 'r') as file:
@@ -262,6 +259,6 @@ elif file_name.lower() == 'helpx':
   print('<doc>: writes the <!DOCTYPE html> into the index.html file')
   print('tag(html_code): writes html code into the index.html file')
 elif file_name.lower() == 'version':
-  print('the oficial version! welcome to the v1.0 versiob of cuzino language')
+    print('cuzino v1.1: simple update')
 else:
   execfilee(file_name)
