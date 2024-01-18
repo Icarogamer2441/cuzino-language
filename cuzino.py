@@ -238,7 +238,7 @@ def execute_cuzino(code):
             with open(filename + ".txt", "a") as file:
                 file.write("data: " + content + "\n")
     elif line.startswith("importnoncuzf"):
-        filename = line.split(" ")[1]strip("\"\'")
+        filename = line.split(" ")[1].strip("\"\'")
         with open(filename, "r") as file:
             content = file.read()
         execute_cuzino(content)
