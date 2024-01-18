@@ -117,6 +117,8 @@ def helps():
     print("importnoncuzf filename.extension: executes a cuzino code but with no .cuz file, only with other file extensions")
     print("importnoncuzxf filename.extension: the same of the importnoncuzf, but its execute cuzinox code")
     print("startweb(portnumber): starts an web server in your directory (only works if you're using, python3 or only python in your terminal commands)")
+    print("editfile.file(filename).editor: on the 'editor' you can use nvim, vim or nano to edit the file (you cant use other editors)")
+    print("editfile.help: show all the files editors you can use")
 
 def terminal(command):
   subprocess.run(command, shell=True)
@@ -250,6 +252,21 @@ def execute_cuzino(code):
     elif line.startswith("startweb"):
         webport = line.split("(")[1].split(")")[0].strip("\"\'")
         terminal(f"python3 -m http.server {webport} || python -m http.server {webport}")
+    elif line.startswith("editfile"):
+        edittype = line.split(".")[1].strip("\"\'")
+        if edittype.startswith("help"):
+            print("you need to have neovim or vim or nano installed on your pc to edit files")
+        elif edittype.startswith("file"):
+            filename = edittype.split("(")[1].split(").")[0].strip("\"\'")
+            openwith = edittype.split(").")[1].strip("\"\'")
+            if openwith.startswith("vim"):
+                terminal(f"vim {filename}")
+            elif openwith.startswith("nvim"):
+                terminal(f"nvim {filename}")
+            elif openwith.startswith("nano"):
+                terminal(f"nano {filename}")
+            else:
+                assert False, "you can't use this editor"
 
 def execfileex(filename):
   with open(filename + '.cuzx', 'r') as file:
@@ -275,6 +292,6 @@ elif file_name.lower() == 'helpx':
   print('<doc>: writes the <!DOCTYPE html> into the index.html file')
   print('tag(html_code): writes html code into the index.html file')
 elif file_name.lower() == 'version':
-    print('cuzino v1.2: simple update. see the github repository and go to issues to see what has been added to this update')
+    print('cuzino v1.3 beta 1: beta of the 1.3 (the beta 1) because this update i gonna add some things. see the github repository and go to issues to see what has been added to this update')
 else:
   execfilee(file_name)
