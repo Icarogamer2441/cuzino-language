@@ -114,6 +114,9 @@ def helps():
     print('importfilex filename: executes a .cuzx file')
     print("banksim.create(filename,bankname): creates a .txt file with the name you give to him, and simulates a data bank file")
     print("banksim.appendata(filename,content): append a content that is simulating a data-content in your sim bank. write only the file name, because its search for .txt files")
+    print("importnoncuzf filename.extension: executes a cuzino code but with no .cuz file, only with other file extensions")
+    print("importnoncuzxf filename.extension: the same of the importnoncuzf, but its execute cuzinox code")
+    print("startweb(portnumber): starts an web server in your directory (only works if you're using, python3 or only python in your terminal commands)")
 
 def terminal(command):
   subprocess.run(command, shell=True)
@@ -234,6 +237,19 @@ def execute_cuzino(code):
             content = simtype.split(",")[1].split(")")[0].strip("\"\'")
             with open(filename + ".txt", "a") as file:
                 file.write("data: " + content + "\n")
+    elif line.startswith("importnoncuzf"):
+        filename = line.split(" ")[1]strip("\"\'")
+        with open(filename, "r") as file:
+            content = file.read()
+        execute_cuzino(content)
+    elif line.startswith("importnoncuzxf"):
+        filename = line.split(" ")[1].strip("\"\'")
+        with open(filename, "r") as file:
+            content = file.read()
+        execute_cuzinox(content)
+    elif line.startswith("startweb"):
+        webport = line.split("(")[1].split(")")[0].strip("\"\'")
+        terminal(f"python3 -m http.server {webport} || python -m http.server {webport}")
 
 def execfileex(filename):
   with open(filename + '.cuzx', 'r') as file:
@@ -259,6 +275,6 @@ elif file_name.lower() == 'helpx':
   print('<doc>: writes the <!DOCTYPE html> into the index.html file')
   print('tag(html_code): writes html code into the index.html file')
 elif file_name.lower() == 'version':
-    print('cuzino v1.1: simple update')
+    print('cuzino v1.2: simple update. see the github repository and go to issues to see what has been added to this update')
 else:
   execfilee(file_name)
