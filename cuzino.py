@@ -119,6 +119,9 @@ def helps():
     print("startweb(portnumber): starts an web server in your directory (only works if you're using, python3 or only python in your terminal commands)")
     print("editfile.file(filename).editor: on the 'editor' you can use nvim, vim or nano to edit the file (you cant use other editors)")
     print("editfile.help: show all the files editors you can use")
+    print("libfunc(funcname): creates a library function with no code")
+    print("actlibfunc(funcname){code}: add code to the function you created")
+    print("calllibfunc(funcname): execute the code on the function you created")
 
 def terminal(command):
   subprocess.run(command, shell=True)
@@ -137,7 +140,7 @@ def math(mathcode):
 
 def execute_cuzino(code):
   lines = code.split('\n')
-  
+
   for index, line in enumerate(lines):
     if line.startswith("talk"):
       if '(' in line and ')' in line:
@@ -267,6 +270,18 @@ def execute_cuzino(code):
                 terminal(f"nano {filename}")
             else:
                 assert False, "you can't use this editor"
+    elif line.startswith("libfunc"):
+        funcname = line.split("{")[1].split("}")[0].strip("\"\'")
+        functions[funcname] = []
+    elif line.startswith("actlibfunc"):
+        funcname = line.split("(")[1].split("){")[0].strip("\"\'")
+        code = line.split("){")[1].split("}")[0].strip("\"\'")
+        functions[funcname].append(code)
+    elif line.startswith("calllibfunc"):
+        funcname = line.split("(")[1].split(")")[0].strip("\"\'")
+        code = functions.get(funcname)
+        real_code = "\n".join(code)
+        execute_cuzino(real_code)
 
 def execfileex(filename):
   with open(filename + '.cuzx', 'r') as file:
@@ -292,6 +307,6 @@ elif file_name.lower() == 'helpx':
   print('<doc>: writes the <!DOCTYPE html> into the index.html file')
   print('tag(html_code): writes html code into the index.html file')
 elif file_name.lower() == 'version':
-    print('cuzino v1.3 beta 1: beta of the 1.3 (the beta 1) because this update i gonna add some things. see the github repository and go to issues to see what has been added to this update')
+    print('cuzino v1.3: finally the 1.3 update that as been added the support for more codes in only one function that is named "library function". see the github repository and go to issues to see what has been added to this update')
 else:
   execfilee(file_name)
