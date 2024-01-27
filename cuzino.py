@@ -282,6 +282,9 @@ def execute_cuzino(code):
         code = functions.get(funcname)
         real_code = "\n".join(code)
         execute_cuzino(real_code)
+    elif line.startswith("execuzx"):
+        code = line.split(" ")[1].strip("\"\'")
+        execute_cuzinox(code)
 
 def execfileex(filename):
   with open(filename + '.cuzx', 'r') as file:
@@ -307,6 +310,6 @@ elif file_name.lower() == 'helpx':
   print('<doc>: writes the <!DOCTYPE html> into the index.html file')
   print('tag(html_code): writes html code into the index.html file')
 elif file_name.lower() == 'version':
-    print('cuzino v1.3: finally the 1.3 update that as been added the support for more codes in only one function that is named "library function". see the github repository and go to issues to see what has been added to this update')
+    print('cuzino v1.4: tiny update (i think)')
 else:
   execfilee(file_name)
