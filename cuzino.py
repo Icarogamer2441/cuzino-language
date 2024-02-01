@@ -8,6 +8,10 @@ def ifs(condition1, condition2, *code):
   if variaveis[condition1] == variaveis[condition2]:
     execute_cuzino(*code)
 
+def ifsnot(condition1, condition2, *code):
+  if variaveis[condition1] != variaveis[condition2]:
+    execute_cuzino(*code)
+
 def vs(varname):
   if varname in variaveis:
     valor = variaveis.get(varname)
@@ -122,6 +126,7 @@ def helps():
     print("libfunc(funcname): creates a library function with no code")
     print("actlibfunc(funcname){code}: add code to the function you created")
     print("calllibfunc(funcname): execute the code on the function you created")
+    print("ifnot[varname1,varname2]{code}: execute an code if the var value it's not the same")
 
 def terminal(command):
   subprocess.run(command, shell=True)
@@ -285,6 +290,12 @@ def execute_cuzino(code):
     elif line.startswith("execuzx"):
         code = line.split(" ")[1].strip("\"\'")
         execute_cuzinox(code)
+    elif line.startswith("ifnot"):
+      condition1 = line.split("[")[1].split(",")[0].strip("\"\'")
+      condition2 = line.split(",")[1].split("]")[0].strip("\"\'")
+      code = line.split("{")[1].split("}")[0].strip("\"\'")
+      ifsnot(condition1, condition2, code)
+
 
 def execfileex(filename):
   with open(filename + '.cuzx', 'r') as file:
@@ -310,6 +321,6 @@ elif file_name.lower() == 'helpx':
   print('<doc>: writes the <!DOCTYPE html> into the index.html file')
   print('tag(html_code): writes html code into the index.html file')
 elif file_name.lower() == 'version':
-    print('cuzino v1.4: tiny update (i think)')
+    print('cuzino v1.5')
 else:
   execfilee(file_name)
